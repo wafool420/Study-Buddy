@@ -1,0 +1,231 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<div class=>
+  {% for post in posts %}
+
+  <div style="padding: 20px;">
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        gap: 2px;
+        margin-bottom: 10px;
+      "
+    >
+      {% if post.user.profile.pf_picture %}
+      <img
+        src="{{ post.user.profile.pf_picture.url }}"
+        alt="User profile picture"
+        width="40"
+        height="40"
+        class="rounded-circle"
+      />
+      {% else %}
+      <img
+        src="{% static 'images/default.png' %}"
+        alt="Default user picture"
+        width="40"
+        height="40"
+        class="rounded-circle"
+      />
+      {% endif %}
+
+      <p>{{ post.user.username }}</p>
+      <p>@{{ profile.course_tag }}</p>
+    </div>
+
+    {% if post.text %}
+    <p style="margin: 10 50px;">{{ post.text }}</p>
+    {% endif %} {% if post.image %}
+    
+    <div style="display: flex; justify-content: center;">
+      
+      <img src="{{ post.image.url }}" alt="Post image" width="500">
+    </div>
+    {% endif %}
+
+    <p><small>Posted at: {{ post.created_at }}</small></p>
+
+    {% if request.user == post.user %}
+    <div class="d-flex align-items-center" style="text-align: center; gap: 10px;">
+      <form method="POST" action="{% url 'delete_post' post.id %}">
+        {% csrf_token %}
+        <button type="submit" style=" font-size: 12px;">Delete post</button>
+      </form>
+      <span class="material-symbols-outlined comment-btn" style="font-size: 30px;"> chat</span>
+    </div>
+    {% endif %}
+
+    <h4>Comments</h4>
+    {% for comment in post.comments.all %}
+    <p>
+      <strong>{{ comment.user.username }}</strong>: {{ comment.text }}<br />
+      <small>{{ comment.created_at }}</small>
+    </p>
+
+    {% if request.user == comment.user or request.user == post.user %}
+    <form method="POST" action="{% url 'delete_comment' comment.id %}">
+      {% csrf_token %}
+      <button type="submit">Delete comment</button>
+    </form>
+    {% endif %}
+
+    <div style="margin-left: 20px">
+      <h5>Replies</h5>
+
+      {% for reply in comment.replies.all %}
+      <p>
+        <strong>{{ reply.user.username }}</strong>: {{ reply.text }}<br />
+        <small>{{ reply.created_at }}</small>
+      </p>
+
+      {% if request.user == reply.user or request.user == post.user %}
+      <form method="POST" action="{% url 'delete_reply' reply.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete reply</button>
+      </form>
+      {% endif %} {% empty %}
+      <p>No replies yet.</p>
+      {% endfor %}
+
+      <p><a href="{% url 'add_reply' comment.id %}">Reply</a></p>
+    </div>
+
+    {% empty %}
+    <p>No comments yet.</p>
+    {% endfor %}
+
+    <p><a href="{% url 'add_comment' post.id %}">Add Comment</a></p>
+    <hr />
+  </div>
+  {% empty %}
+  <p>No posts yet.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+<!--<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+  </head>
+  <body>
+    <h1>Hello {{ profile.user.username }}</h1>
+
+    {% if profile.pf_picture %}
+    <img src="{{ profile.pf_picture.url }}" alt="Profile picture" width="150" />
+    {% else %}
+    <img
+      src="{% static 'images/default.png' %}"
+      alt="Default profile picture"
+      width="150"
+    />
+    {% endif %}
+
+    <br />
+    <p>{{ profile.bio }}</p>
+
+    <form method="POST" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+    </form>
+
+    <p><a href="{% url 'create_post' %}">Create a new post</a></p>
+
+    <hr />
+
+    <h2>Change Profile</h2>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Change</button>
+    </form>
+
+    <hr />
+
+    <h1>Posts</h1>
+
+    {% for post in posts %}
+    <div>
+      {% if post.user.profile.pf_picture %}
+      <img
+        src="{{ post.user.profile.pf_picture.url }}"
+        alt="User profile picture"
+        width="40"
+        height="40"
+      />
+      {% else %}
+      <img
+        src="{% static 'images/default.png' %}"
+        alt="Default user picture"
+        width="40"
+        height="40"
+      />
+      {% endif %}
+
+      <p><strong>{{ post.user.username }}</strong></p>
+
+      {% if post.text %}
+      <p>{{ post.text }}</p>
+      {% endif %} {% if post.image %}
+      <img src="{{ post.image.url }}" alt="Post image" width="200" />
+      {% endif %}
+
+      <p><small>Posted at: {{ post.created_at }}</small></p>
+
+      {% if request.user == post.user %}
+      <form method="POST" action="{% url 'delete_post' post.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete post</button>
+      </form>
+      {% endif %}
+
+      <h4>Comments</h4>
+      {% for comment in post.comments.all %}
+      <p>
+        <strong>{{ comment.user.username }}</strong>: {{ comment.text }}<br />
+        <small>{{ comment.created_at }}</small>
+      </p>
+
+      {% if request.user == comment.user or request.user == post.user %}
+      <form method="POST" action="{% url 'delete_comment' comment.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete comment</button>
+      </form>
+      {% endif %}
+
+      <div style="margin-left: 20px">
+        <h5>Replies</h5>
+
+        {% for reply in comment.replies.all %}
+        <p>
+          <strong>{{ reply.user.username }}</strong>: {{ reply.text }}<br />
+          <small>{{ reply.created_at }}</small>
+        </p>
+
+        {% if request.user == reply.user or request.user == post.user %}
+        <form method="POST" action="{% url 'delete_reply' reply.id %}">
+          {% csrf_token %}
+          <button type="submit">Delete reply</button>
+        </form>
+        {% endif %} {% empty %}
+        <p>No replies yet.</p>
+        {% endfor %}
+
+        <p><a href="{% url 'add_reply' comment.id %}">Reply</a></p>
+      </div>
+
+      {% empty %}
+      <p>No comments yet.</p>
+      {% endfor %}
+
+      <p><a href="{% url 'add_comment' post.id %}">Add Comment</a></p>
+      <hr />
+    </div>
+    {% empty %}
+    <p>No posts yet.</p>
+    {% endfor %}
+  </body>
+</html>-->

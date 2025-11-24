@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Reply</title>
+  </head>
+  <body>
+    <h1>Reply to Comment</h1>
+
+    <p>
+      On post by <strong>{{ comment.post.user.username }}</strong>: {{
+      comment.post.text }}
+    </p>
+
+    <p>
+      Comment by <strong>{{ comment.user.username }}</strong>: {{ comment.text
+      }}
+    </p>
+
+    <hr />
+
+    <form method="POST">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Reply</button>
+    </form>
+
+    <p><a href="{% url 'home' %}">Back to home</a></p>
+  </body>
+</html>
