@@ -1,0 +1,842 @@
+li {
+  list-style: none;
+  font-size: 25px;
+}
+
+.nav-highlight span {
+  color: rgb(0, 195, 255);
+}
+
+.sidebar-logo {
+  display: block;
+  width: 60px;
+  margin: 8px 12px 20px;
+}
+
+.aside-left {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+.aside-right {
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  align-self: flex-start;
+  margin-left: 5%;
+  text-align: center;
+}
+
+.aside-left .material-symbols-outlined {
+  font-size: 60px;
+}
+
+.aside-left .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  color: #000000;
+}
+
+.aside-left a:hover {
+  background-color: rgb(223, 223, 223);
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+main {
+  width: 40%;
+}
+
+button {
+  border-radius: 9999px;
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(0, 195, 255);
+  color: white;
+  font-size: 25px;
+  font-weight: 500;
+  transition: transform 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+.post-btn-div {
+  margin: 0 100px;
+}
+
+.post-item {
+  padding: 40px;
+  border-bottom: 1px solid #949494; /* the line between posts */
+}
+
+.post-item:last-child {
+  border-bottom: none;
+}
+
+.no-posts-text {
+  margin-top: 250px;
+  text-align: center;
+}
+
+.no-posts-text .material-symbols-outlined {
+  font-size: 80px;
+}
+
+.edit-profile {
+  border: 1px solid;
+  padding: 10px 50px;
+  width: 25%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: aliceblue;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.modal-blur {
+  background-color: rgb(0, 0, 0);
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.hidden {
+  display: none;
+}
+/* Reviewer */
+
+.subjects-page {
+  padding: 40px;
+}
+
+/* Subject detail layout */
+.subject-detail {
+  padding: 30px 40px;
+  max-width: 960px;
+}
+
+.subject-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.subject-description {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+.subject-topics-heading {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Topic cards */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.topic-card {
+  display: block;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-decoration: none;
+  border: 1px solid #e3e6ea;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+  color: #222;
+}
+
+.topic-card h4 {
+  margin: 0 0 6px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.topic-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #555;
+}
+
+.topic-detail {
+  padding: 30px 40px;
+  max-width: 960px;
+}
+
+.topic-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.topic-description {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 24px;
+}
+
+/* Quiz card on topic page */
+.topic-quiz-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 1px solid #e3e6ea;
+  background: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.topic-quiz-heading {
+  margin: 0 0 4px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.topic-quiz-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Start quiz button */
+.topic-quiz-btn {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background-color: #00cfff; /* match your cyan theme */
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.topic-quiz {
+  padding: 40px;
+}
+
+.quiz-result {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.quiz-result h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.quiz-topic {
+  font-weight: 600;
+}
+
+.quiz-result-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 24px 28px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.quiz-score {
+  margin: 0 0 10px 0;
+}
+
+.quiz-score .score-main {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #007bff; /* same blue as your buttons/sidebar */
+}
+
+.quiz-score .score-small {
+  font-size: 1.1rem;
+  margin-left: 6px;
+  color: #555;
+}
+
+.quiz-message {
+  margin: 6px 0 18px 0;
+  font-size: 1rem;
+}
+
+.quiz-message--great {
+  color: #1d9c5b;
+}
+
+.quiz-message--good {
+  color: #007bff;
+}
+
+.quiz-message--ok {
+  color: #e67e22;
+}
+
+.quiz-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* notes */
+
+.notes-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+/* Header */
+
+.notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.notes-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.notes-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.notes-count-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: #e7f3ff;
+  color: #0a66c2;
+  white-space: nowrap;
+}
+
+/* Create bar */
+
+.notes-create-wrapper {
+  margin-bottom: 1rem;
+}
+
+.note-create-form {
+  width: 100%;
+}
+
+.note-input-group {
+  display: flex;
+  gap: 0.5rem;
+  background: #f5f7fb;
+  border-radius: 999px;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #dde1ee;
+}
+
+.note-create-form input[type="text"],
+.note-create-form input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.note-create-form input::placeholder {
+  color: #999;
+}
+
+.note-create-btn {
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.9rem;
+}
+
+/* If you use a generic .btn-primary somewhere else, keep it;
+   just ensure it looks nice here too. */
+.btn-primary {
+  background: #00b4ff;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:hover {
+  background: #0094d4;
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Section title */
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0.75rem;
+}
+
+/* Notes grid & cards */
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.note-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  text-decoration: none;
+  background: #ffffff;
+  border: 1px solid #e4e6ef;
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.05);
+  color: inherit;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 15px rgba(15, 23, 42, 0.12);
+  border-color: #c5d9ff;
+}
+
+.note-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.note-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin: 0;
+  color: #111827;
+}
+
+.note-updated {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.note-snippet {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin: 0.1rem 0 0.55rem;
+}
+
+.note-card-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.note-footer-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+/* Empty state */
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  border-radius: 20px;
+  background: #f4f6ff;
+  border: 1px dashed #c7d2fe;
+}
+
+.empty-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e0ebff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+  font-size: 1.6rem;
+}
+
+/* ===== Note editor layout ===== */
+
+.editor-wrapper {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+/* Top actions: back + delete */
+.editor-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-back {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2563eb;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn-back .arrow {
+  font-size: 1.1rem;
+}
+
+.btn-back:hover {
+  text-decoration: underline;
+}
+
+/* Delete button */
+.btn-delete {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #ff4b4b;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.btn-delete:hover {
+  background: #e63b3b;
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Paper sheet styling */
+
+.paper-sheet {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.4rem 1.6rem 1.2rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.paper-sheet form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.field-group {
+  width: 100%;
+}
+
+/* Title input (first field in the form) */
+.paper-sheet input[type="text"],
+.paper-sheet input[name="title"] {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.4rem 0.2rem 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  outline: none;
+}
+
+/* Textarea content */
+.paper-sheet textarea,
+.paper-sheet textarea[name="content"] {
+  width: 100%;
+  min-height: 260px;
+  resize: vertical;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  background: #f9fafb;
+  outline: none;
+}
+
+.paper-sheet textarea:focus,
+.paper-sheet input[type="text"]:focus {
+  border-color: #00b4ff;
+  box-shadow: 0 0 0 1px rgba(0, 180, 255, 0.2);
+}
+
+/* Save button */
+.save-area {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.6rem;
+}
+
+.btn-save {
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #00b4ff;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.btn-save:hover {
+  background: #0094d4;
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Comment Section */
+
+.comment-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 40px;
+}
+
+/* --- Post card at top --- */
+.post-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 0 0 1px #eee;
+  margin-bottom: 12px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.post-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-user {
+  font-weight: 600;
+}
+
+.post-tag {
+  font-size: 0.8rem;
+  color: #888;
+  margin-left: 4px;
+}
+
+.post-date {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.post-text {
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.post-image {
+  margin-top: 8px;
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+/* --- Separator --- */
+.comment-separator {
+  margin: 18px 0 10px;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+/* --- Comment form row (avatar + input) --- */
+.comment-form-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.comment-avatar img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-form {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comment-form textarea,
+.comment-form input[type="text"] {
+  flex: 1;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  padding: 8px 14px;
+  resize: none;
+  min-height: 40px;
+  font-size: 0.95rem;
+}
+
+.btn-comment-send {
+  border: none;
+  background: #00b7ff;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* --- Comment list --- */
+.comment-item {
+  margin-bottom: 1.5rem;
+}
+
+/* comment row: text left, delete right */
+.comment-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.comment-text {
+  flex: 1;
+}
+
+/* replies block */
+.comment-replies {
+  margin-left: 2.5rem; /* indent under the comment */
+  margin-top: 0.5rem;
+}
+
+.replies-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* each reply row */
+.reply-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.reply-text {
+  flex: 1;
+}
+
+/* round delete icon buttons */
+.icon-delete-btn {
+  border: none;
+  background: #00bfff; /* same blue as your Post button */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-delete-btn .material-symbols-outlined {
+  color: #fff;
+  font-size: 22px;
+}
+
+/* slightly smaller for replies (optional) */
+.icon-delete-small {
+  width: 32px;
+  height: 32px;
+}
+
+.comment-input {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between avatar and form */
+}
+
+/* form should take all remaining width */
+.comment-form {
+  display: flex;
+  align-items: center;
+  flex: 1; /* <- makes form stretch to the end */
+  gap: 10px; /* space between input and button */
+  margin: 0;
+}
+
+/* input wrapper grows inside the form */
+.comment-field {
+  flex: 1; /* <- makes the input area fill the form */
+}
+
+/* actual input/textarea fills its wrapper */
+.comment-field input[type="text"],
+.comment-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* (optional) keep avatar small */
+.comment-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}

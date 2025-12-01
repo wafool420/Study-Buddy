@@ -1,0 +1,86 @@
+/* make page center the card */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.auth-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e5e5f7;
+  opacity: 1;
+  background-image: linear-gradient(135deg, #00d4ff 25%, transparent 25%),
+    linear-gradient(225deg, #00d4ff 25%, transparent 25%),
+    linear-gradient(45deg, #00d4ff 25%, transparent 25%),
+    linear-gradient(315deg, #00d4ff 25%, #e5e5f7 25%);
+  background-position: 10px 0, 10px 0, 0 0, 0 0;
+  background-size: 20px 20px;
+  background-repeat: repeat;
+  font-family: system-ui, sans-serif;
+}
+
+/* card */
+.register-container {
+  background: #ffffff;
+  border-radius: 8px;
+  border: solid 2px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.register-container h1 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* form fields */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.form-error-msg {
+  color: crimson;
+  margin-bottom: 1rem;
+}
+
+/* button + back link */
+.btn-primary {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: none;
+  border-radius: 999px;
+  background: #00bfff;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+
+.back-link {
+  display: block;
+  margin-top: 0.75rem;
+  text-align: center;
+}

@@ -46,10 +46,18 @@ class PostForm(forms.ModelForm):
 
         return cleaned_data
 
+# forms.py
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ["text"]
+        widgets = {
+            "content": forms.Textarea(attrs={
+                "rows": 2,
+                "placeholder": "Write a comment…",
+            })
+        }
+
 
 class ReplyForm(forms.ModelForm):
     class Meta:

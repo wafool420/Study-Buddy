@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="quiz-result">
+  <h1>Results for <span class="quiz-topic">{{ topic.title }}</span></h1>
+
+  <div class="quiz-result-card">
+    <p class="quiz-score">
+      <span class="score-main">{{ score }}</span>
+      <span class="score-small">/ {{ total }} correct</span>
+    </p>
+
+    {# Optional feedback message #} {% if score == total %}
+    <p class="quiz-message quiz-message--great">
+      Perfect score! 🎉 You really know this topic.
+    </p>
+    {% elif score >= total|add:"-1" %}
+    <p class="quiz-message quiz-message--good">
+      Nice work! Just a little more review and you’ll master it.
+    </p>
+    {% else %}
+    <p class="quiz-message quiz-message--ok">
+      Good effort! Review the topic and try the quiz again.
+    </p>
+    {% endif %}
+
+    <div class="quiz-actions">
+      <a
+        href="{% url 'reviewer:start-quiz' topic.pk %}"
+        class="btn btn-primary"
+      >
+        Try Quiz Again
+      </a>
+      <a
+        href="{% url 'reviewer:topic-detail' topic.pk %}"
+        class="btn btn-outline-secondary"
+      >
+        Back to Topic
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

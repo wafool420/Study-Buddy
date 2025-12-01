@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %}
+<section class="notes-page">
+  <!-- Header / summary -->
+  <div class="notes-header">
+    <div class="notes-header-left">
+      <h1 class="notes-title">Notes</h1>
+      <p class="notes-subtitle">
+        Capture quick ideas, review lecture points, and keep everything in one
+        place.
+      </p>
+    </div>
+    <div class="notes-count-badge">
+      {{ notes|length }} note{{ notes|length|pluralize }}
+    </div>
+  </div>
+
+  <!-- Create note bar -->
+  <div class="notes-create-wrapper">
+    <form method="post" class="note-create-form">
+      {% csrf_token %}
+      <div class="note-input-group">
+        {{ form.title }}
+        <button type="submit" class="btn-primary note-create-btn">
+          + Create
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Notes grid -->
+  <h2 class="section-title mt-3">Your Dashboard</h2>
+
+  <div class="notes-grid">
+    {% for note in notes %}
+    <a href="{% url 'note_detail' note.pk %}" class="note-card">
+      <div class="note-card-header">
+        <h3 class="note-title">{{ note.title|default:"Untitled Note" }}</h3>
+        <span class="note-updated"> {{ note.updated_at|date:"M d, Y" }} </span>
+      </div>
+
+      <p class="note-snippet">
+        {{ note.content|default:"No content yet..."|truncatechars:160 }}
+      </p>
+
+      <div class="note-card-footer">
+        <span class="note-footer-label">Open note →</span>
+      </div>
+    </a>
+    {% empty %}
+    <div class="empty-state">
+      <div class="empty-badge">📝</div>
+      <h3>No notes yet</h3>
+      <p>
+        Type a title above and hit <strong>+ Create</strong> to start your first
+        note.
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

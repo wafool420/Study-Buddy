@@ -1,0 +1,149 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="comment-page">
+  <!-- === POST BEING DISCUSSED ====================================== -->
+  <article class="post-card">
+    <header class="post-header">
+      <div class="post-avatar">
+        {% if post.user.profile.pf_picture %}
+        <img
+          src="{{ post.user.profile.pf_picture.url }}"
+          alt="User profile picture"
+          width="40"
+          height="40"
+          class="rounded-circle"
+        />
+        {% else %}
+        <img
+          src="{% static 'images/default.png' %}"
+          alt="Default user picture"
+          width="40"
+          height="40"
+          class="rounded-circle"
+        />
+        {% endif %}
+      </div>
+      <div class="post-meta">
+        <div class="post-user">
+          {{ post.user.username }}
+          <span class="post-tag">@CPE</span>
+        </div>
+        <div class="post-date">
+          Posted at: {{ post.created_at|date:"M d, Y, g:i a" }}
+        </div>
+      </div>
+    </header>
+
+    <div class="post-body">
+      <p class="post-text">{{ post.text }}</p>
+
+      {% if post.image %}
+      <img
+        src="{{ post.image.url }}"
+        class="post-image"
+        alt="Post image"
+        width="500px"
+        style="margin: 10px 55px"
+      />
+      {% endif %}
+    </div>
+  </article>
+
+  <!-- thin separation bar -->
+  <hr class="comment-separator" />
+
+  <!-- Add comment row (avatar + form) -->
+  <section class="comment-input">
+    <div class="comment-avatar">
+      {% if request.user.profile.pf_picture %}
+      <img
+        src="{{ request.user.profile.pf_picture.url }}"
+        alt="{{ request.user.username }}"
+      />
+      {% else %}
+      <img
+        src="{% static 'images/default.png' %}"
+        alt="{{ request.user.username }}"
+      />
+      {% endif %}
+    </div>
+
+    <form method="post" class="comment-form">
+      {% csrf_token %} {{ form.non_field_errors }}
+
+      <div class="comment-field">{{ form.text }}</div>
+
+      <button type="submit" class="comment-submit-btn">Post</button>
+    </form>
+  </section>
+
+  <section class="comments">
+    <h4>Comments</h4>
+
+    {% for comment in post.comments.all %}
+    <div class="comment-item">
+      <!-- top-level comment (text + delete in one row) -->
+      <div class="comment-main">
+        <div class="comment-text">
+          <p class="mb-0">
+            <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+          </p>
+          <small class="text-muted">{{ comment.created_at }}</small>
+        </div>
+
+        {% if request.user == comment.user or request.user == post.user %}
+        <form
+          method="POST"
+          action="{% url 'delete_comment' comment.id %}"
+          class="comment-delete-form"
+        >
+          {% csrf_token %}
+          <button type="submit" class="icon-delete-btn">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </form>
+        {% endif %}
+      </div>
+
+      <!-- replies block -->
+      <div class="comment-replies">
+        <div class="replies-header">
+          <h5 class="mb-1">Replies</h5>
+          <a href="{% url 'add_reply' comment.id %}" class="reply-link"
+            >Reply</a
+          >
+        </div>
+
+        {% for reply in comment.replies.all %}
+        <div class="reply-item">
+          <div class="reply-text">
+            <p class="mb-0">
+              <strong>{{ reply.user.username }}</strong>: {{ reply.text }}
+            </p>
+            <small class="text-muted">{{ reply.created_at }}</small>
+          </div>
+
+          {% if request.user == reply.user or request.user == post.user %}
+          <form
+            method="POST"
+            action="{% url 'delete_reply' reply.id %}"
+            class="reply-delete-form"
+          >
+            {% csrf_token %}
+            <button type="submit" class="icon-delete-btn icon-delete-small">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </form>
+          {% endif %}
+        </div>
+        {% empty %}
+        <p class="text-muted small mb-0">No replies yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+    {% empty %}
+    <p>No comments yet.</p>
+    {% endfor %}
+  </section>
+
+  {% endblock %}
+</div>

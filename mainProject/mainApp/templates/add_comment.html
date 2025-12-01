@@ -1,13 +1,70 @@
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <form method="POST" action="{% url 'add_comment' post.id %}">
-      {% csrf_token %} {{ form.as_p }} {# or a simple textarea if you want #}
-      <button type="submit">Comment</button>
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<div class="comment-page">
+  <!-- Back link -->
+  <a href="{% url 'home' %}" class="btn-back">← Back to feed</a>
+
+  <!-- Post preview -->
+  <article class="post-preview">
+    <header class="post-header">
+      <div class="post-avatar">
+        {% if post.user.profile.pf_picture %}
+        <img
+          src="{{ post.user.profile.pf_picture.url }}"
+          alt="{{ post.user.username }}"
+        />
+        {% else %}
+        <img
+          src="{% static 'images/default.png' %}"
+          alt="{{ post.user.username }}"
+        />
+        {% endif %}
+      </div>
+
+      <div class="post-meta">
+        <strong>{{ post.user.username }}</strong>
+        <div class="post-date">
+          Posted at: {{ post.created_at|date:"M d, Y, g:i a" }}
+        </div>
+      </div>
+    </header>
+
+    <p class="post-caption">{{ post.text }}</p>
+
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="" class="post-image" />
+    {% endif %}
+  </article>
+
+  <!-- separator bar -->
+  <hr class="comment-separator" />
+
+  <!-- Your avatar + comment form -->
+  <div class="comment-composer">
+    <div class="composer-avatar">
+      {% if request.user.profile.pf_picture %}
+      <img
+        src="{{ request.user.profile.pf_picture.url }}"
+        alt="{{ request.user.username }}"
+      />
+      {% else %}
+      <img
+        src="{% static 'images/default.png' %}"
+        alt="{{ request.user.username }}"
+      />
+      {% endif %}
+    </div>
+
+    <form method="post" class="comment-form">
+      {% csrf_token %} {{ form.non_field_errors }}
+
+      <div class="field-group">
+        {{ form.content }} {{ form.content.errors }}
+      </div>
+
+      <button type="submit" class="btn-primary">Post comment</button>
     </form>
-  </body>
-</html>
+  </div>
+</div>
+
+{% endblock %}

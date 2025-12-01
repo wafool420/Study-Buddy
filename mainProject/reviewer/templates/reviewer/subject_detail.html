@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="subject-detail">
+  <h1 class="subject-title">{{ subject.title }}</h1>
+  <p class="subject-description">{{ subject.description }}</p>
+
+  <h3 class="subject-topics-heading">Topics</h3>
+
+  <div class="topic-grid">
+    {% for t in subject.topics.all %}
+    <a href="{% url 'reviewer:topic-detail' t.pk %}" class="topic-card">
+      <h4>{{ t.title }}</h4>
+      {% if t.description %}
+      <p>{{ t.description|truncatewords:18 }}</p>
+      {% else %}
+      <p>Click to view lessons and quiz for this topic.</p>
+      {% endif %}
+    </a>
+    {% empty %}
+    <p>No topics added yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

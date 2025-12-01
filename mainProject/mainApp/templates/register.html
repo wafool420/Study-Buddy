@@ -1,19 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/register-style.css' %}" />
   </head>
-  <body>
-    {% if form.errors %}
-    <p>form error...</p>
+  <body class="auth-body">
+    <div class="register-container">
+      <h1>Create account</h1>
 
-    {% endif %}
+      {% if form.errors %}
+      <p class="form-error-msg">Please fix the errors below.</p>
+      {% endif %}
 
-    <form action="{% url 'register' %}" method="post">
-      {% csrf_token %} {{ form }}
-      <button type="submit">Enter</button>
-    </form>
-    <a href="{% url 'login' %}">back</a>
+      <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+          {{ form.username.label_tag }} {{ form.username }}
+        </div>
+
+        <div class="form-group">
+          {{ form.password1.label_tag }} {{ form.password1 }}
+        </div>
+
+        <div class="form-group">
+          {{ form.password2.label_tag }} {{ form.password2 }}
+        </div>
+
+        <button type="submit" class="btn-primary">Enter</button>
+      </form>
+
+      <a href="{% url 'login' %}" class="back-link">Back</a>
+    </div>
   </body>
 </html>

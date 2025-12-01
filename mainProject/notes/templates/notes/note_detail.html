@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+<div class="editor-wrapper">
+  <!-- Top actions -->
+  <div class="editor-actions">
+    <a href="{% url 'note_list' %}" class="btn-back">
+      <span class="arrow">&larr;</span> Back to Dashboard
+    </a>
+
+    {% if note.pk %}
+    <form method="post" action="{% url 'note_delete' note.pk %}">
+      {% csrf_token %}
+      <button
+        type="submit"
+        class="btn-delete"
+        onclick="return confirm('Are you sure you want to delete this?');"
+      >
+        Delete Note
+      </button>
+    </form>
+    {% endif %}
+  </div>
+
+  <!-- Paper sheet -->
+  <div class="paper-sheet">
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="field-group">{{ form.title }}</div>
+
+      <div class="field-group">{{ form.content }}</div>
+
+      <div class="save-area">
+        <button type="submit" class="btn-save">Save Note</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

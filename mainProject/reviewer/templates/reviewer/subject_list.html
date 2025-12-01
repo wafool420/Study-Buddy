@@ -1,0 +1,26 @@
+<!-- templates/core/subject_list.html -->
+{% extends "base.html" %} {% block content %}
+<div class="subjects-page">
+  <h1 class="subjects-title">Subjects</h1>
+
+  <div class="row">
+    {% for subject in subjects %}
+    <div class="col-md-6 mb-3">
+      <a
+        href="{% url 'reviewer:subject-detail' subject.slug %}"
+        class="subject-card"
+      >
+        <h3>{{ subject.title }}</h3>
+        {% if subject.description %}
+        <p>{{ subject.description|truncatewords:20 }}</p>
+        {% else %}
+        <p>Click to view topics and quizzes for this subject.</p>
+        {% endif %}
+      </a>
+    </div>
+    {% empty %}
+    <p>No subjects yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

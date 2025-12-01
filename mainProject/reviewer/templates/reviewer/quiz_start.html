@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block content %}
+<div class="topic-quiz">
+  <h2>Quiz: {{ topic.title }}</h2>
+  <form method="post">
+    {% csrf_token %} {% for q in questions %}
+    <div>
+      <p><strong>{{ forloop.counter }}. {{ q.text }}</strong></p>
+      {% for ch in q.choices.all %}
+      <label>
+        <input type="radio" name="question_{{ q.id }}" value="{{ ch.id }}" />
+        {{ ch }} </label
+      ><br />
+      {% endfor %}
+    </div>
+    <hr />
+    {% endfor %}
+    <button type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}

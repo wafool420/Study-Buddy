@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Post, Comment
+from .models import Profile, Post, Comment, Reply
 from django.contrib import messages
 from .forms import ProfileForm, PostForm, CommentForm, ReplyForm
 
@@ -93,43 +93,89 @@ def delete_post(request, post_id):
     return redirect('home')
 
 @login_required
-def add_comment(request, post_id):
-    post = Post.objects.get(id=post_id)
+def comment_section(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    # all comments for this post
+    comments = Comment.objects.filter(post=post).select_related('user').prefetch_related('reply_set__user')
 
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save(commit=False)   
-            comment.post = post                 
-            comment.user = request.user         
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
             comment.save()
-            return redirect('home')             
+            # stay on the same page after posting
+            return redirect('comment_section', post_id=post.id)
     else:
         form = CommentForm()
 
-    return render(request, "add_comment.html", {"form": form, "post": post})
+    return render(request, "comment_section.html", {
+        "post": post,
+        "comments": comments,
+        "form": form,
+    })
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    comments = (
+        Comment.objects
+        .filter(post=post)
+        .select_related("user")
+        .order_by("created_at")  # oldest → newest; optional
+    )
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            # stay on the same page
+            return redirect("add_comment", post_id=post.id)
+    else:
+        form = CommentForm()
+
+    return render(
+        request,
+        "comment_section.html",          # only this template now
+        {"form": form, "post": post, "comments": comments},
+    )
+
+
 
 @login_required
 def delete_comment(request, comment_id):
-    comment = Comment.objects.get(id=comment_id)
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # save this BEFORE deleting
+    post_id = comment.post.id
 
     # who is allowed?
     is_comment_owner = (comment.user == request.user)
     is_post_owner = (comment.post.user == request.user)
 
     if not (is_comment_owner or is_post_owner):
-        # you can also just `return redirect('home')` if you don't want a 403
         raise PermissionDenied("You are not allowed to delete this comment.")
 
     if request.method == "POST":
         comment.delete()
-        return redirect('home')
 
-    # no GET confirmation page for now, just bounce back
-    return redirect('home')
+    # go back to that post's comment section
+    return redirect('comment_section', post_id=post_id)
 
 def add_reply(request, comment_id):
     comment = Comment.objects.get(id=comment_id)
+    post_id = comment.post.id
 
     if request.method == "POST":
         form = ReplyForm(request.POST)
@@ -138,7 +184,7 @@ def add_reply(request, comment_id):
             reply.comment = comment          # link reply → comment
             reply.user = request.user        # who wrote it
             reply.save()
-            return redirect('home')          # back to feed
+            return redirect('comment_section', post_id=post_id)          # back to feed
     else:
         form = ReplyForm()
 
@@ -149,20 +195,21 @@ def add_reply(request, comment_id):
 
 @login_required
 def delete_reply(request, reply_id):
-    reply = Reply.objects.get(id=reply_id)
+    reply = get_object_or_404(Reply, id=reply_id)
+
+    # get the post id through the comment
+    post_id = reply.comment.post.id
 
     # who is allowed?
     is_reply_owner = (reply.user == request.user)
     is_post_owner = (reply.comment.post.user == request.user)
     is_comment_owner = (reply.comment.user == request.user)
-    # optional: allow comment owner too
-    # is_comment_owner = (reply.comment.user == request.user)
 
     if not (is_reply_owner or is_post_owner or is_comment_owner):
         raise PermissionDenied("You are not allowed to delete this reply.")
 
     if request.method == "POST":
         reply.delete()
-        return redirect('home')
 
-    return redirect('home')
+    # go back to the same post's comment page
+    return redirect('comment_section', post_id=post_id)

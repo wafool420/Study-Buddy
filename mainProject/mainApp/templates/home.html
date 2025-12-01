@@ -3,36 +3,56 @@
 <div class=>
   {% for post in posts %}
 
-  <div style="padding: 20px;">
-    <div
-      style="
-        display: flex;
-        flex-direction: row;
-        gap: 2px;
-        margin-bottom: 10px;
-      "
-    >
-      {% if post.user.profile.pf_picture %}
-      <img
-        src="{{ post.user.profile.pf_picture.url }}"
-        alt="User profile picture"
-        width="40"
-        height="40"
-        class="rounded-circle"
-      />
-      {% else %}
-      <img
-        src="{% static 'images/default.png' %}"
-        alt="Default user picture"
-        width="40"
-        height="40"
-        class="rounded-circle"
-      />
-      {% endif %}
+  <div class="post-item">
+    <div>
+  <div
+    style="
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      margin-bottom: 10px;
+      align-items: center;
+    "
+  >
+    {% if post.user.profile.pf_picture %}
+    <img
+      src="{{ post.user.profile.pf_picture.url }}"
+      alt="User profile picture"
+      width="40"
+      height="40"
+      class="rounded-circle"
+    />
+    {% else %}
+    <img
+      src="{% static 'images/default.png' %}"
+      alt="Default user picture"
+      width="40"
+      height="40"
+      class="rounded-circle"
+    />
+    {% endif %}
 
-      <p>{{ post.user.username }}</p>
-      <p>@{{ profile.course_tag }}</p>
+    <!-- Text block -->
+    <div style="display: flex; flex-direction: column;">
+      <!-- Username + tag side by side -->
+      <div style="display: flex; gap: 6px; align-items: baseline;">
+        <p style="margin: 0; font-weight: 600;">
+          {{ post.user.username }}
+        </p>
+        <p style="margin: 0; color: #555;">
+          @{{ post.user.profile.course_tag }}
+        </p>
+      </div>
+
+      
+      <p style="margin: 2px 0 0 0;">
+        <small>Posted at: {{ post.created_at }}</small>
+      </p>
     </div>
+  </div>
+</div>
+
+    
 
     {% if post.text %}
     <p style="margin: 10 50px;">{{ post.text }}</p>
@@ -44,19 +64,28 @@
     </div>
     {% endif %}
 
-    <p><small>Posted at: {{ post.created_at }}</small></p>
-
-    {% if request.user == post.user %}
-    <div class="d-flex align-items-center" style="text-align: center; gap: 10px;">
+    
+    <div class="d-flex align-items-center" style="text-align: center; gap: 10px; margin-top: 20px;">
+      {% if request.user == post.user %}
       <form method="POST" action="{% url 'delete_post' post.id %}">
         {% csrf_token %}
-        <button type="submit" style=" font-size: 12px;">Delete post</button>
+        <button type="submit" style=" font-size: 12px;" onclick="return confirm('Are you sure you want to delete this?')">
+          <span class="material-symbols-outlined"> delete</span>
+        </button>
       </form>
-      <span class="material-symbols-outlined comment-btn" style="font-size: 30px;"> chat</span>
+      {% endif %}
+      <form method="POST" action="{% url 'comment_section' post.id %}">
+        {% csrf_token %}
+        <button type="submit" style=" font-size: 12px;">
+          <span class="material-symbols-outlined"> chat</span>
+        </button>
+      </form>
+      
     </div>
-    {% endif %}
-
-    <h4>Comments</h4>
+    
+    
+    <!---->
+    <!-- <h4>Comments</h4>
     {% for comment in post.comments.all %}
     <p>
       <strong>{{ comment.user.username }}</strong>: {{ comment.text }}<br />
@@ -95,15 +124,26 @@
     <p>No comments yet.</p>
     {% endfor %}
 
-    <p><a href="{% url 'add_comment' post.id %}">Add Comment</a></p>
-    <hr />
+   
+    <hr /> -->
+
+  
   </div>
+  
   {% empty %}
-  <p>No posts yet.</p>
+  <div class="no-posts-text">
+    <span class="material-symbols-outlined"> build</span>
+    <h1>There are currently no posts yet.</h1>
+  </div>
+ 
   {% endfor %}
 </div>
 
+
+
+
 {% endblock %}
+
 
 <!--<!DOCTYPE html>
 <html lang="en">

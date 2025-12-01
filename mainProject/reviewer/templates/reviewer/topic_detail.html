@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="topic-detail">
+  <h1 class="topic-title">{{ topic.title }}</h1>
+  <p class="topic-description">{{ topic.description }}</p>
+
+  <div class="topic-quiz-card">
+    <div>
+      <h3 class="topic-quiz-heading">Quick Quiz</h3>
+      <p class="topic-quiz-meta">
+        {{ topic.questions.count }} questions about this topic.
+      </p>
+    </div>
+
+    <a href="{% url 'reviewer:start-quiz' topic.pk %}" class="topic-quiz-btn">
+      Start Quiz ({{ topic.questions.count }} questions)
+    </a>
+  </div>
+</div>
+
+{% endblock %}
