@@ -1,20 +1,58 @@
 {% extends "base.html" %} {% block content %}
-<div class="topic-quiz">
+<div class="rev-quiz-wrapper">
   <h2>Quiz: {{ topic.title }}</h2>
-  <form method="post">
-    {% csrf_token %} {% for q in questions %}
-    <div>
-      <p><strong>{{ forloop.counter }}. {{ q.text }}</strong></p>
-      {% for ch in q.choices.all %}
-      <label>
-        <input type="radio" name="question_{{ q.id }}" value="{{ ch.id }}" />
-        {{ ch }} </label
-      ><br />
+
+  <form id="quiz-form" method="post">
+    {% csrf_token %} {% for question in questions %}
+    <div class="question-block" style="margin-bottom: 24px">
+      <p style="font-weight: 600">
+        {{ forloop.counter }}. {{ question.text }} {% if is_owner %}
+        <button
+          type="submit"
+          form="delete-form-{{ question.id }}"
+          style="
+            margin-left: 8px;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ff4d4f;
+            background: #ff4d4f;
+            color: white;
+            cursor: pointer;
+          "
+        >
+          Delete
+        </button>
+        {% endif %}
+      </p>
+
+      {% for choice in question.choices.all %}
+      <div style="margin-left: 18px; margin-bottom: 4px">
+        <label>
+          <input
+            type="radio"
+            name="question_{{ question.id }}"
+            value="{{ choice.id }}"
+          />
+          {{ choice.text }}
+        </label>
+      </div>
       {% endfor %}
     </div>
     <hr />
     {% endfor %}
-    <button type="submit">Submit</button>
+
+    <button type="submit" class="btn-primary">Submit</button>
   </form>
+
+  {% if is_owner %} {% for question in questions %}
+  <form
+    id="delete-form-{{ question.id }}"
+    method="post"
+    action="{% url 'reviewer:question-delete' question.id %}"
+  >
+    {% csrf_token %}
+  </form>
+  {% endfor %} {% endif %}
 </div>
 {% endblock %}

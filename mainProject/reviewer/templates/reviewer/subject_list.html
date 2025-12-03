@@ -1,26 +1,231 @@
-<!-- templates/core/subject_list.html -->
 {% extends "base.html" %} {% block content %}
-<div class="subjects-page">
-  <h1 class="subjects-title">Subjects</h1>
+<style>
+  .rev-wrapper {
+    padding: 24px 40px;
+    background: #ffffff;
+    min-height: calc(100vh - 60px);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+  }
 
-  <div class="row">
-    {% for subject in subjects %}
-    <div class="col-md-6 mb-3">
-      <a
-        href="{% url 'reviewer:subject-detail' subject.slug %}"
-        class="subject-card"
-      >
-        <h3>{{ subject.title }}</h3>
-        {% if subject.description %}
-        <p>{{ subject.description|truncatewords:20 }}</p>
-        {% else %}
-        <p>Click to view topics and quizzes for this subject.</p>
-        {% endif %}
-      </a>
+  .rev-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .rev-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .rev-tabs {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 15px;
+  }
+
+  .rev-tab {
+    cursor: pointer;
+    font-weight: 600;
+    color: #777;
+    text-decoration: none;
+  }
+
+  .rev-tab-active {
+    color: #000;
+    border-bottom: 2px solid #00a8ff;
+    padding-bottom: 2px;
+  }
+
+  .rev-btn-primary {
+    border-radius: 999px;
+    padding: 9px 20px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    background: #00a8ff;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rev-btn-primary:hover {
+    background: #0090da;
+  }
+
+  .rev-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .rev-card {
+    border-radius: 12px;
+    border: 1px solid #e4e4e4;
+    padding: 18px;
+    background: #fafafa;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.15s ease, transform 0.05s ease,
+      background-color 0.15s ease;
+  }
+
+  .rev-card:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transform: translateY(-1px);
+  }
+
+  .rev-card-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 16px;
+  }
+
+  .rev-card-body {
+    font-size: 14px;
+    color: #444;
+  }
+
+  .rev-card-meta {
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+  }
+
+  .rev-empty {
+    margin-top: 16px;
+    color: #777;
+    font-size: 14px;
+  }
+
+  .rev-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .rev-card-delete-btn {
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11px;
+    border: none;
+    font-weight: 600;
+    background: #ff4b4b;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .rev-card-delete-btn:hover {
+    background: #e03737;
+  }
+</style>
+
+<div class="rev-wrapper">
+  <div class="rev-header">
+    <div>
+      <h1>Subjects</h1>
+
+      {% if user.is_authenticated %}
+      <div class="rev-tabs">
+        <a
+          href="?tab=yours"
+          class="rev-tab {% if active_tab == 'yours' %}rev-tab-active{% endif %}"
+        >
+          Your Reviewers
+        </a>
+        <a
+          href="?tab=browse"
+          class="rev-tab {% if active_tab == 'browse' %}rev-tab-active{% endif %}"
+        >
+          Browse
+        </a>
+      </div>
+      {% endif %}
     </div>
-    {% empty %}
-    <p>No subjects yet.</p>
+
+    {% if user.is_authenticated %}
+    <a href="{% url 'reviewer:subject-create' %}" class="rev-btn-primary">
+      Create Reviewer
+    </a>
+    {% endif %}
+  </div>
+
+  {% if user.is_authenticated and active_tab == 'yours' %} {% if my_subjects %}
+  <div class="rev-grid">
+    {% for subject in my_subjects %}
+    <div
+      class="rev-card"
+      data-subject-url="{% url 'reviewer:subject-detail' subject.slug %}"
+    >
+      <div class="rev-card-header">
+        <div class="rev-card-title">{{ subject.title }}</div>
+
+        <form
+          method="post"
+          action="{% url 'reviewer:subject-delete' subject.slug %}"
+        >
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="rev-card-delete-btn"
+            onclick="event.stopPropagation(); return confirm('Delete this reviewer and all its topics?');"
+          >
+            Delete
+          </button>
+        </form>
+      </div>
+
+      <div class="rev-card-body">
+        {{ subject.description|truncatechars:140 }}
+      </div>
+    </div>
     {% endfor %}
   </div>
+  {% else %}
+  <div class="rev-empty">
+    You haven't created any reviewers yet.
+    <a href="{% url 'reviewer:subject-create' %}">
+      Create your first reviewer.
+    </a>
+  </div>
+  {% endif %} {% else %} {% if browse_subjects %}
+  <div class="rev-grid">
+    {% for subject in browse_subjects %}
+    <a href="{% url 'reviewer:subject-detail' subject.slug %}" class="rev-card">
+      <div class="rev-card-title">{{ subject.title }}</div>
+      <div class="rev-card-body">
+        {{ subject.description|truncatechars:140 }}
+      </div>
+      <div class="rev-card-meta">by {{ subject.owner.username }}</div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="rev-empty">No public reviewers to browse yet.</div>
+  {% endif %} {% endif %}
 </div>
+
+<script>
+  document
+    .querySelectorAll(".rev-card[data-subject-url]")
+    .forEach(function (card) {
+      card.addEventListener("click", function () {
+        const url = card.getAttribute("data-subject-url");
+        if (url) {
+          window.location.href = url;
+        }
+      });
+    });
+</script>
+
 {% endblock %}

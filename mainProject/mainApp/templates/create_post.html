@@ -1,19 +1,107 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Create Post</title>
-  </head>
-  <body>
-    <h1>Create a post</h1>
+{% extends "base.html" %} {% load static %} {% block content %}
 
-    <form method="POST" enctype="multipart/form-data">
+<style>
+  .post-wrapper {
+    padding: 24px 40px;
+    min-height: calc(100vh - 60px);
+    background: #ffffff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+  }
+
+  .post-card {
+    max-width: 520px;
+    border-radius: 16px;
+    border: 1px solid #e4e4e4;
+    background: #fafafa;
+    padding: 24px 28px;
+  }
+
+  .post-title {
+    margin: 0 0 4px 0;
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  .post-subtitle {
+    margin: 0 0 20px 0;
+    font-size: 13px;
+    color: #666;
+  }
+
+  .post-form p {
+    margin: 0 0 14px 0;
+    font-size: 14px;
+  }
+
+  .post-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .post-form input[type="text"],
+  .post-form textarea {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #d2d2d2;
+    padding: 8px 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .post-form textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .post-form input[type="file"] {
+    font-size: 13px;
+  }
+
+  .post-submit-btn {
+    margin-top: 6px;
+    border-radius: 999px;
+    border: none;
+    padding: 9px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #00a8ff;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .post-submit-btn:hover {
+    background: #0090da;
+  }
+
+  .post-back-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #0077cc;
+    text-decoration: none;
+  }
+
+  .post-back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="post-wrapper">
+  <div class="post-card">
+    <h1 class="post-title">Create a post</h1>
+    <p class="post-subtitle">
+      Share updates, questions, or helpful tips with your Study Buddy feed.
+    </p>
+
+    <form method="POST" enctype="multipart/form-data" class="post-form">
       {% csrf_token %} {{ form.as_p }}
-      <button type="submit">Post</button>
+      <button type="submit" class="post-submit-btn">Post</button>
     </form>
 
-    <br />
-    <a href="{% url 'home' %}">Back to home</a>
-  </body>
-</html>
+    <a href="{% url 'home' %}" class="post-back-link">← Back to home</a>
+  </div>
+</div>
+
+{% endblock %}

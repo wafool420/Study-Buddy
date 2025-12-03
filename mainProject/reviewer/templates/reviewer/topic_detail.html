@@ -1,20 +1,123 @@
 {% extends "base.html" %} {% block content %}
+<style>
+  .rev-topic-wrapper {
+    padding: 24px 40px;
+    background: #ffffff;
+    min-height: calc(100vh - 60px);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+  }
+  .rev-topic-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .rev-topic-desc {
+    max-width: 700px;
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .rev-quiz-card {
+    border-radius: 12px;
+    border: 1px solid #e4e4e4;
+    padding: 18px 20px;
+    background: #fafafa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 760px;
+    margin-top: 16px;
+  }
+  .rev-quiz-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .rev-quiz-meta {
+    font-size: 13px;
+    color: #777;
+  }
+  .rev-btn-primary {
+    border-radius: 999px;
+    padding: 9px 20px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    background: #00a8ff;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rev-btn-primary:hover {
+    background: #0090da;
+  }
+  .rev-empty {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #777;
+  }
+  .rev-btn-danger {
+    border-radius: 999px;
+    padding: 9px 20px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    background: #ff4b4b;
+    color: #fff;
+    cursor: pointer;
+  }
+  .rev-btn-danger:hover {
+    background: #e03737;
+  }
+</style>
 
-<div class="topic-detail">
-  <h1 class="topic-title">{{ topic.title }}</h1>
-  <p class="topic-description">{{ topic.description }}</p>
+<div class="rev-topic-wrapper">
+  <h1 class="rev-topic-title">{{ topic.title }}</h1>
 
-  <div class="topic-quiz-card">
-    <div>
-      <h3 class="topic-quiz-heading">Quick Quiz</h3>
-      <p class="topic-quiz-meta">
-        {{ topic.questions.count }} questions about this topic.
-      </p>
-    </div>
-
-    <a href="{% url 'reviewer:start-quiz' topic.pk %}" class="topic-quiz-btn">
-      Start Quiz ({{ topic.questions.count }} questions)
+  {% if topic.description %}
+  <div class="rev-topic-desc">{{ topic.description }}</div>
+  {% endif %} {% if user.is_authenticated and topic.subject.owner == user %}
+  <div style="margin-bottom: 16px; display: flex; gap: 10px">
+    <a
+      href="{% url 'reviewer:question-create' topic.id %}"
+      class="rev-btn-primary"
+    >
+      Add Question
     </a>
+
+    <form
+      method="post"
+      action="{% url 'reviewer:topic-delete' topic.pk %}"
+      onsubmit="return confirm('Delete this topic and all its questions?');"
+    >
+      {% csrf_token %}
+      <button type="submit" class="rev-btn-danger">Delete Topic</button>
+    </form>
+  </div>
+  {% endif %}
+
+  <!-- QUICK QUIZ CARD -->
+  <h3 style="margin-top: 24px">Quick Quiz</h3>
+  <div class="rev-quiz-card">
+    <div>
+      <div class="rev-quiz-title">Start quiz for this topic</div>
+      <div class="rev-quiz-meta">
+        {{ topic.questions.count }} question{{ topic.questions.count|pluralize
+        }}
+      </div>
+    </div>
+    {% if topic.questions.exists %}
+    <a href="{% url 'reviewer:start-quiz' topic.id %}" class="rev-btn-primary">
+      Start Quiz
+    </a>
+    {% else %}
+    <span class="rev-quiz-meta"
+      >Add at least one question to start the quiz.</span
+    >
+    {% endif %}
   </div>
 </div>
 

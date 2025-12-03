@@ -1,0 +1,154 @@
+{% extends "base.html" %} {% block content %}
+<style>
+  .rev-q-wrapper {
+    padding: 24px 40px;
+    background: #ffffff;
+    min-height: calc(100vh - 60px);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+  }
+
+  .rev-q-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .rev-q-sub {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+
+  .rev-card {
+    border-radius: 16px;
+    border: 1px solid #e6e6e6;
+    padding: 18px 20px;
+    background: #fafafa;
+    margin-bottom: 18px;
+  }
+
+  .rev-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .rev-field {
+    margin-bottom: 14px;
+  }
+
+  .rev-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  .rev-field input[type="text"],
+  .rev-field textarea {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #d4d4d4;
+    padding: 8px 10px;
+    font-size: 14px;
+    resize: vertical;
+  }
+
+  /* make the question box smaller */
+  .rev-field textarea {
+    height: 80px; /* ← main change */
+    min-height: 60px;
+    max-height: 120px;
+  }
+
+  .rev-error {
+    color: #d93025;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .rev-choice-row {
+    padding: 10px 0;
+    border-bottom: 1px dashed #e0e0e0;
+  }
+
+  .rev-choice-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #555;
+  }
+
+  .rev-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .btn-primary {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #00a8ff;
+    color: #fff;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #cfcfcf;
+    background: #fff;
+    color: #444;
+    text-decoration: none;
+  }
+</style>
+
+<div class="rev-q-wrapper">
+  <div class="rev-q-title">Create Question</div>
+  <div class="rev-q-sub">For topic: <strong>{{ topic.title }}</strong></div>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="rev-card">
+      <h3>Question details</h3>
+
+      {{ form.non_field_errors }}
+
+      <div class="rev-field">{{ form.text.label_tag }} {{ form.text }}</div>
+    </div>
+
+    <div class="rev-card">
+      <h3>Choices</h3>
+
+      {{ formset.management_form }} {% for choice_form in formset %}
+      <div class="rev-choice-row">
+        <div class="rev-choice-label">Choice {{ forloop.counter }}</div>
+        {{ choice_form }}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="rev-actions">
+      <a
+        href="{% url 'reviewer:topic-detail' pk=topic.pk %}"
+        class="btn-secondary"
+      >
+        Cancel
+      </a>
+      <button type="submit" class="btn-primary">Save question</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
