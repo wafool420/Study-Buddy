@@ -1,0 +1,203 @@
+{% extends "base.html" %} {% block content %}
+<style>
+  .flashcards-page {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 60px 40px 40px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+  }
+
+  .flashcards-main {
+    flex: 1;
+    max-width: 650px;
+  }
+
+  .flashcards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .flashcards-header h1 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .btn-create-flashcard {
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: #00a8ff;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-create-flashcard:hover {
+    opacity: 0.9;
+  }
+
+  .flashcards-tabs {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    font-size: 16px;
+  }
+
+  .flashcards-tabs a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .flashcards-tabs a.active {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .flashcards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 24px;
+  }
+
+  .flashcard-tile {
+    background: #e3e3e3;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+  }
+
+  .flashcard-tile-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .flashcard-tile-meta {
+    font-size: 13px;
+    color: #555;
+  }
+
+  .flashcards-empty {
+    grid-column: 1 / -1;
+    color: #777;
+    font-size: 14px;
+  }
+
+  /* Right profile column */
+
+  .flashcards-profile {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .flashcards-profile h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 12px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .profile-avatar span {
+    font-size: 48px;
+  }
+
+  .profile-course {
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .profile-btn {
+    margin-bottom: 10px;
+    padding: 10px 24px;
+    border-radius: 999px;
+    background: #00a8ff;
+    color: #fff;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 600;
+  }
+
+  .profile-btn:hover {
+    opacity: 0.9;
+  }
+</style>
+
+<div class="flashcards-page">
+  <!-- middle content -->
+  <div class="flashcards-main">
+    <div class="flashcards-header">
+      <h1>FlashCards</h1>
+      <a href="{% url 'flashcard_set_create' %}" class="btn-create-flashcard">
+        Create Flashcard
+      </a>
+    </div>
+
+    <div class="flashcards-tabs">
+      <a
+        href="?tab=yours"
+        class="{% if active_tab == 'yours' %}active{% endif %}"
+      >
+        Your Flashcards
+      </a>
+      <a
+        href="?tab=browse"
+        class="{% if active_tab == 'browse' %}active{% endif %}"
+      >
+        Browse
+      </a>
+    </div>
+
+    <div class="flashcards-grid">
+      {% if active_tab == "yours" %} {% for s in my_sets %}
+      <a href="{% url 'flashcard_set_detail' s.pk %}" class="flashcard-tile">
+        <div class="flashcard-tile-title">{{ s.title }}</div>
+        <div class="flashcard-tile-meta">
+          {{ s.cards.count }} cards<br />
+          Updated {{ s.created_at|date:"M d, Y" }}
+        </div>
+      </a>
+      {% empty %}
+      <!-- grey placeholders if user has no sets yet -->
+      <div class="flashcards-empty">
+        You don’t have any flashcard sets yet. Click “Create Flashcard” to make
+        one.
+      </div>
+      {% endfor %} {% else %} {% for s in public_sets %}
+      <a href="{% url 'flashcard_set_detail' s.pk %}" class="flashcard-tile">
+        <div class="flashcard-tile-title">{{ s.title }}</div>
+        <div class="flashcard-tile-meta">
+          {{ s.cards.count }} cards • by {{ s.owner.username }}
+        </div>
+      </a>
+      {% empty %}
+      <div class="flashcards-empty">
+        No public flashcard sets available yet.
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

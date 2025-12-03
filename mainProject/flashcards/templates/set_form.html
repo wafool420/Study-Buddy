@@ -1,0 +1,197 @@
+{% extends "base.html" %} {% block content %}
+<style>
+  .fc-create-wrapper {
+    min-height: calc(100vh - 60px);
+    padding: 24px 40px;
+    color: #111111;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    background: #ffffff;
+  }
+
+  .fc-create-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .fc-create-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .fc-create-header-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .fc-btn {
+    border-radius: 999px;
+    padding: 8px 18px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+
+  .fc-btn-primary {
+    background: #00a8ff;
+    color: #ffffff;
+  }
+
+  .fc-btn-primary:hover {
+    background: #0090da;
+  }
+
+  .fc-btn-secondary {
+    background: #ffffff;
+    color: #00a8ff;
+    border: 1px solid #00a8ff;
+  }
+
+  .fc-btn-secondary:hover {
+    background: #eaf7ff;
+  }
+
+  .fc-main-card {
+    border-radius: 12px;
+    border: 1px solid #e2e2e2;
+    padding: 20px 22px;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    max-width: 900px;
+  }
+
+  .fc-label {
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #555555;
+    font-weight: 500;
+  }
+
+  .fc-input,
+  .fc-textarea {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #d4d4d4;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: #fafafa;
+    color: #111111;
+    outline: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .fc-input:focus,
+  .fc-textarea:focus {
+    border-color: #00a8ff;
+    background: #ffffff;
+  }
+
+  .fc-input::placeholder,
+  .fc-textarea::placeholder {
+    color: #9a9a9a;
+  }
+
+  .fc-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .fc-field {
+    margin-bottom: 16px;
+  }
+
+  .fc-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+
+  .fc-toggle-row span {
+    font-size: 13px;
+    color: #555555;
+  }
+
+  .fc-error {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #d40000;
+  }
+</style>
+
+<form method="post" class="fc-create-wrapper">
+  {% csrf_token %}
+
+  <div class="fc-create-header-buttons">
+    <button
+      type="submit"
+      name="action"
+      value="create"
+      class="fc-btn fc-btn-secondary"
+    >
+      Create
+    </button>
+
+    <button
+      type="submit"
+      name="action"
+      value="create_practice"
+      class="fc-btn fc-btn-primary"
+    >
+      Create and practice
+    </button>
+  </div>
+
+  <div class="fc-main-card">
+    <!-- Title -->
+    <div class="fc-field">
+      <div class="fc-label">Title</div>
+      <input
+        type="text"
+        name="{{ form.title.name }}"
+        class="fc-input"
+        placeholder="Enter a title for your set"
+        value="{{ form.title.value|default_if_none:'' }}"
+        required
+      />
+      {% if form.title.errors %}
+      <div class="fc-error">{{ form.title.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Description -->
+    <div class="fc-field">
+      <div class="fc-label">Description</div>
+      <textarea
+        name="{{ form.description.name }}"
+        class="fc-textarea"
+        placeholder="Add a description (optional)"
+      >
+{{ form.description.value|default_if_none:'' }}</textarea
+      >
+      {% if form.description.errors %}
+      <div class="fc-error">{{ form.description.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Public toggle -->
+    <div class="fc-toggle-row">
+      <span>Visibility</span>
+      <label
+        style="display: flex; align-items: center; gap: 8px; font-size: 13px"
+      >
+        {{ form.is_public }}
+        <span>Public set</span>
+      </label>
+    </div>
+    {% if form.is_public.errors %}
+    <div class="fc-error">{{ form.is_public.errors|join:", " }}</div>
+    {% endif %}
+  </div>
+</form>
+{% endblock %}

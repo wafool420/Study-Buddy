@@ -1,0 +1,306 @@
+{% extends "base.html" %} {% block content %}
+<style>
+  .fs-wrapper {
+    min-height: calc(100vh - 60px);
+    padding: 24px 40px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    background: #ffffff;
+    color: #111111;
+  }
+
+  .fs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .fs-header-left h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .fs-description {
+    margin-top: 8px;
+    color: #555555;
+    font-size: 14px;
+    max-width: 600px;
+  }
+
+  .fs-meta {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #777777;
+  }
+
+  .fs-header-right {
+    text-align: right;
+  }
+
+  .fs-header-right .fs-count {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .fs-btn {
+    border-radius: 999px;
+    padding: 7px 16px;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.15s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .fs-btn-primary {
+    background: #00a8ff;
+    color: #ffffff;
+  }
+
+  .fs-btn-primary:hover {
+    background: #0090da;
+  }
+
+  .fs-btn-secondary {
+    background: #ffffff;
+    color: #00a8ff;
+    border: 1px solid #00a8ff;
+  }
+
+  .fs-btn-secondary:hover {
+    background: #eaf7ff;
+  }
+
+  .fs-btn-danger {
+    background: #ff4b4b;
+    color: #ffffff;
+  }
+
+  .fs-btn-danger:hover {
+    background: #e13737;
+  }
+
+  .fs-btn-row {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .fs-btn-row form {
+    margin: 0; /* remove default form margins */
+    display: inline-block; /* so forms themselves don't stretch */
+  }
+
+  /* cards list */
+
+  .fs-cards-container {
+    margin-top: 20px;
+  }
+
+  .fs-cards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .fs-cards-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .fs-card {
+    border-radius: 10px;
+    border: 1px solid #e3e3e3;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.05s ease,
+      background-color 0.15s ease;
+  }
+
+  .fs-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    background: #ffffff;
+    transform: translateY(-1px);
+  }
+
+  .fs-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .fs-card-index {
+    font-size: 12px;
+    color: #888888;
+  }
+
+  .fs-card-header form {
+    margin: 0;
+  }
+
+  .fs-card-delete-btn {
+    border-radius: 999px;
+    padding: 6px 14px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    background: #00a8ff;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .fs-card-delete-btn:hover {
+    background: #0090da;
+  }
+
+  .fs-card-term {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .fs-card-definition {
+    font-size: 14px;
+    color: #444444;
+  }
+
+  .fs-card-back {
+    display: none;
+  }
+
+  .fs-card.is-flipped .fs-card-front {
+    display: none;
+  }
+
+  .fs-card.is-flipped .fs-card-back {
+    display: block;
+  }
+
+  .fs-empty {
+    font-size: 14px;
+    color: #777777;
+    margin-top: 8px;
+  }
+</style>
+
+<div class="fs-wrapper">
+  <div class="fs-header">
+    <div class="fs-header-left">
+      <h1>{{ set.title }}</h1>
+      {% if set.description %}
+      <div class="fs-description">{{ set.description }}</div>
+      {% endif %}
+      <div class="fs-meta">
+        {{ cards|length }} cards • {% if set.is_public %} Public set {% else %}
+        Private set {% endif %} • Created {{ set.created_at|date:"M d, Y" }}
+      </div>
+    </div>
+
+    <div class="fs-header-right">
+      <div class="fs-count">{{ cards|length }} cards</div>
+
+      <div class="fs-btn-row">
+        <!-- everyone can go back -->
+        <form action="{% url 'flashcard_set_list' %}" method="get">
+          <button type="submit" class="fs-btn fs-btn-primary">
+            Back to Flashcards
+          </button>
+        </form>
+
+        {% if is_owner %}
+        <!-- owner-only actions -->
+        <form action="{% url 'flashcard_add_card' set.pk %}" method="get">
+          <button type="submit" class="fs-btn fs-btn-primary">Add card</button>
+        </form>
+
+        <form method="post" action="{% url 'flashcard_set_delete' set.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="fs-btn fs-btn-danger">Delete Set</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="fs-cards-container">
+    <div class="fs-cards-header">
+      <h2>Cards</h2>
+      <span style="font-size: 13px; color: #777777">
+        Click a card to flip between term and definition
+      </span>
+    </div>
+
+    {% if cards %} {% for card in cards %}
+    <div class="fs-card" data-card>
+      <div class="fs-card-header">
+        <div class="fs-card-index">
+          Card {{ forloop.counter }} of {{ cards|length }}
+        </div>
+
+        {% if is_owner %}
+        <form method="post" action="{% url 'flashcard_delete_card' card.pk %}">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="fs-card-delete-btn"
+            onclick="event.stopPropagation();"
+          >
+            Delete Card
+          </button>
+        </form>
+        {% endif %}
+      </div>
+
+      <!-- FRONT: term + optional image -->
+      <div class="fs-card-front">
+        <div class="fs-card-term">{{ card.term }}</div>
+        {% if card.image %}
+        <div style="margin-top: 8px">
+          <img
+            src="{{ card.image.url }}"
+            alt=""
+            style="max-width: 100%; border-radius: 8px"
+          />
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- BACK: definition -->
+      <div class="fs-card-back">
+        <div class="fs-card-index">Definition</div>
+        <div class="fs-card-definition">{{ card.definition|linebreaksbr }}</div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <div class="fs-empty">
+      No cards in this set yet. {% if is_owner %}
+      <a href="{% url 'flashcard_add_card' set.pk %}"> Add your first card. </a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // simple click-to-flip behavior
+  document.querySelectorAll("[data-card]").forEach(function (card) {
+    card.addEventListener("click", function () {
+      card.classList.toggle("is-flipped");
+    });
+  });
+</script>
+{% endblock %}

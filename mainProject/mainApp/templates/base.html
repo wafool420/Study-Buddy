@@ -39,19 +39,19 @@
               <span>Reviewers</span>
             </a>
           </li>
-          <!--<li>
-            <a href="#" class="nav-link">
+          <li>
+            <a href="{% url 'flashcard_set_list' %}" class="nav-link">
               <span class="material-symbols-outlined"> stacks</span>
               <span>Flashcards</span>
             </a>
-          </li>-->
+          </li>
           <li>
             <a href="{% url 'note_list' %}" class="nav-link">
               <span class="material-symbols-outlined"> notes</span>
               <span>Notes</span>
             </a>
           </li>
-          <li>
+          <!--<li>
             <a href="#" class="nav-link">
               <span class="material-symbols-outlined" style="color: orange">
                 chat</span
@@ -61,7 +61,7 @@
                 construction</span
               >
             </a>
-          </li>
+          </li>-->
         </ul>
         <div class="post-btn-div">
           <form method="GET" action="{% url 'create_post' %}">

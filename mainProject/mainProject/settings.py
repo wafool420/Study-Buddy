@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'mainApp',
     'notes',
     'reviewer',
+    'flashcards'
 ]
 
 MIDDLEWARE = [
